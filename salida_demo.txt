@@ -1,0 +1,82 @@
+Mensajes: 8 | Capacidad de canal: 2 | Núcleos: 1 | Procesos: 4 (Productor, Calculador, Acumulador, Logger)
+
+=== BLOQUE 1: ejecución SECUENCIAL (referencia) ===
+Suma de cuadrados: 204
+--> Tiempo secuencial: 0.203721 s
+
+=== BLOQUE 2: pipeline CSP (intercambio de mensajes) ===
+[  0.005 s] Productor  (pid 570) PRODUCE  dato 1
+[  0.006 s] Productor  (pid 570) ENVIA    1 -> canal A
+[  0.006 s] Calculador (pid 569) RECIBE   1 <- canal A  [esperó 5.6 ms: canal vacío]
+[  0.011 s] Productor  (pid 570) PRODUCE  dato 2
+[  0.011 s] Productor  (pid 570) ENVIA    2 -> canal A
+[  0.016 s] Productor  (pid 570) PRODUCE  dato 3
+[  0.016 s] Productor  (pid 570) ENVIA    3 -> canal A
+[  0.021 s] Acumulador (pid 568) RECIBE   1 <- canal B  [esperó 21.3 ms: canal vacío]
+[  0.021 s] Calculador (pid 569) CALCULA  1^2 = 1
+[  0.021 s] Calculador (pid 569) ENVIA    1 -> canal B
+[  0.021 s] Calculador (pid 569) RECIBE   2 <- canal A
+[  0.022 s] Productor  (pid 570) PRODUCE  dato 4
+[  0.022 s] Productor  (pid 570) ENVIA    4 -> canal A
+[  0.027 s] Acumulador (pid 568) ACUMULA  total = 1
+[  0.027 s] Productor  (pid 570) PRODUCE  dato 5
+[  0.036 s] Calculador (pid 569) CALCULA  2^2 = 4
+[  0.037 s] Calculador (pid 569) ENVIA    4 -> canal B
+[  0.037 s] Acumulador (pid 568) RECIBE   4 <- canal B  [esperó 10.0 ms: canal vacío]
+[  0.037 s] Productor  (pid 570) ENVIA    5 -> canal A  [bloqueado 9.9 ms: canal lleno]
+[  0.037 s] Calculador (pid 569) RECIBE   3 <- canal A
+[  0.042 s] Productor  (pid 570) PRODUCE  dato 6
+[  0.042 s] Acumulador (pid 568) ACUMULA  total = 5
+[  0.052 s] Calculador (pid 569) CALCULA  3^2 = 9
+[  0.052 s] Calculador (pid 569) ENVIA    9 -> canal B
+[  0.052 s] Acumulador (pid 568) RECIBE   9 <- canal B  [esperó 10.2 ms: canal vacío]
+[  0.052 s] Productor  (pid 570) ENVIA    6 -> canal A  [bloqueado 10.4 ms: canal lleno]
+[  0.052 s] Calculador (pid 569) RECIBE   4 <- canal A
+[  0.057 s] Acumulador (pid 568) ACUMULA  total = 14
+[  0.057 s] Productor  (pid 570) PRODUCE  dato 7
+[  0.068 s] Calculador (pid 569) CALCULA  4^2 = 16
+[  0.068 s] Acumulador (pid 568) RECIBE   16 <- canal B  [esperó 10.3 ms: canal vacío]
+[  0.068 s] Calculador (pid 569) ENVIA    16 -> canal B
+[  0.068 s] Calculador (pid 569) RECIBE   5 <- canal A
+[  0.068 s] Productor  (pid 570) ENVIA    7 -> canal A  [bloqueado 10.5 ms: canal lleno]
+[  0.073 s] Acumulador (pid 568) ACUMULA  total = 30
+[  0.073 s] Productor  (pid 570) PRODUCE  dato 8
+[  0.083 s] Calculador (pid 569) CALCULA  5^2 = 25
+[  0.083 s] Acumulador (pid 568) RECIBE   25 <- canal B  [esperó 10.3 ms: canal vacío]
+[  0.083 s] Productor  (pid 570) ENVIA    8 -> canal A  [bloqueado 10.2 ms: canal lleno]
+[  0.083 s] Calculador (pid 569) ENVIA    25 -> canal B
+[  0.083 s] Calculador (pid 569) RECIBE   6 <- canal A
+[  0.088 s] Acumulador (pid 568) ACUMULA  total = 55
+[  0.098 s] Calculador (pid 569) CALCULA  6^2 = 36
+[  0.099 s] Calculador (pid 569) ENVIA    36 -> canal B
+[  0.099 s] Acumulador (pid 568) RECIBE   36 <- canal B  [esperó 10.1 ms: canal vacío]
+[  0.099 s] Productor  (pid 570) FIN      centinela -> canal A
+[  0.102 s] Calculador (pid 569) RECIBE   7 <- canal A  [esperó 3.3 ms: canal vacío]
+[  0.104 s] Acumulador (pid 568) ACUMULA  total = 91
+[  0.117 s] Calculador (pid 569) CALCULA  7^2 = 49
+[  0.117 s] Calculador (pid 569) ENVIA    49 -> canal B
+[  0.117 s] Acumulador (pid 568) RECIBE   49 <- canal B  [esperó 13.4 ms: canal vacío]
+[  0.117 s] Calculador (pid 569) RECIBE   8 <- canal A
+[  0.122 s] Acumulador (pid 568) ACUMULA  total = 140
+[  0.132 s] Calculador (pid 569) CALCULA  8^2 = 64
+[  0.133 s] Calculador (pid 569) ENVIA    64 -> canal B
+[  0.133 s] Acumulador (pid 568) RECIBE   64 <- canal B  [esperó 10.2 ms: canal vacío]
+[  0.133 s] Calculador (pid 569) FIN      centinela <- canal A
+[  0.138 s] Acumulador (pid 568) ACUMULA  total = 204
+[  0.138 s] Acumulador (pid 568) FIN      centinela <- canal B | total = 204
+
+Suma de cuadrados (por Pipe): 204
+--> Tiempo pipeline CSP: 0.137939 s  (crear los procesos: 0.195 s, aparte)
+
+Verificación: el resultado del pipeline coincide con la versión secuencial.
+
+=== TABLA COMPARATIVA ===
+Versión                     Tiempo (s)
+Secuencial                    0.203721
+Pipeline CSP                  0.137939
+Aceleración                      1.48x
+
+Bloqueo del Productor (canal A lleno):       41.3 ms
+Bloqueo del Calculador (canal B lleno):       0.3 ms
+Espera del Calculador (canal A vacío):       10.5 ms
+Espera del Acumulador (canal B vacío):       95.9 ms

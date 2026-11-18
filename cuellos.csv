@@ -1,0 +1,4 @@
+escenario,secuencial_ms,pipeline_ms,acel,bloq_prod_ms,bloq_calc_ms,espera_calc_ms,espera_acum_ms,arranque_ms
+Balanceado (10/10/10 ms),1200.0,435.937,2.753,0.678,0.865,13.888,26.265,1729.263
+Cuello medio (5/15/5 ms),1000.0,631.642,1.583,365.264,0.82,8.793,424.323,1747.979
+Cuello fuerte (5/30/5 ms),1600.0,1234.185,1.296,921.695,0.973,9.621,1026.181,1734.351
